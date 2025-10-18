@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ADB Device Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .device-list {
+            margin-top: 20px;
+        }
+        .device {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        .device.online {
+            border-left: 4px solid #4CAF50;
+        }
+        .device.offline {
+            border-left: 4px solid #f44336;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var socket = io();
+            var deviceList = document.getElementById('deviceList');
+
+            socket.on('device_update', function(data) {
+                deviceList.innerHTML = '';
+                data.devices.forEach(function(device) {
+                    var deviceElement = document.createElement('div');
+                    deviceElement.className = 'device ' + device.status.toLowerCase();
+                    deviceElement.innerHTML = `
+                        <strong>Serial:</strong> ${device.serial}<br>
+                        <strong>Status:</strong> ${device.status}
+                    `;
+                    deviceList.appendChild(deviceElement);
+                });
+
+                if (data.devices.length === 0) {
+                    deviceList.innerHTML = '<p>No devices connected</p>';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>ADB Device Monitor</h1>
+    <div id="deviceList" class="device-list">
+        <p>Loading devices...</p>
+    </div>
+</body>
+</html>

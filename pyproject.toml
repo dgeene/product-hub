@@ -1,0 +1,22 @@
+[project]
+name = "product-hub"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "dgeene",email = "david.geene@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask (>=3.1.2,<4.0.0)",
+    "flask-socketio (>=5.5.1,<6.0.0)",
+    "pyudev (>=0.24.4,<0.25.0)",
+    "adb-shell (>=0.4.4,<0.5.0)"
+]
+
+[tool.poetry]
+packages = [{include = "product_hub", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
