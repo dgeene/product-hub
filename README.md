@@ -2,6 +2,8 @@
 
 ## Setup prep
 
+### Linux
+
 Install ADB the lazy way `sudo apt-get install -y android-tools-adb`
 
 Make sure your user is in the plugdev group: `groups`
@@ -34,5 +36,12 @@ $ adb devices
 List of devices attached
 ba0b86d	no permissions (missing udev rules? user is in the plugdev group); see [http://developer.android.com/tools/device.html]
 ```
+
+### Mac OS
+
+No setup steps required. `System_profiler` is used to poll for usb connections.
+
+
+## Running
 
 Run the server: `python -m src.product_hub.device_monitor`
