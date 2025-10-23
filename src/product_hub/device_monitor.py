@@ -136,5 +136,58 @@ def handle_connect():
     socketio.emit("device_update", {"devices": devices})
 
 
+@socketio.on("reboot_device")
+def handle_reboot(data):
+    """Handle device reboot request"""
+    serial = data.get("serial")
+    if not serial:
+        socketio.emit(
+            "reboot_response", {"success": False, "error": "No serial provided"}
+        )
+        return
+
+    try:
+        result = subprocess.run(
+            ["adb", "-s", serial, "reboot"], capture_output=True, text=True, timeout=5
+        )
+        if result.returncode == 0:
+            socketio.emit("reboot_response", {"success": True, "serial": serial})
+        else:
+            socketio.emit(
+                "reboot_response",
+                {"success": False, "error": result.stderr or "Unknown error"},
+            )
+    except Exception as e:
+        socketio.emit("reboot_response", {"success": False, "error": str(e)})
+
+
+@socketio.on("shell_command")
+def handle_shell_command(data):
+    """Handle ADB shell command execution"""
+    serial = data.get("serial")
+    command = data.get("command")
+
+    if not serial or not command:
+        socketio.emit("shell_error", {"error": "Missing serial or command"})
+        return
+
+    try:
+        result = subprocess.run(
+            ["adb", "-s", serial, "shell", command],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        output = result.stdout
+        if result.stderr:
+            output += result.stderr
+
+        socketio.emit("shell_response", {"output": output.rstrip()})
+    except subprocess.TimeoutExpired:
+        socketio.emit("shell_error", {"error": "Command timed out"})
+    except Exception as e:
+        socketio.emit("shell_error", {"error": str(e)})
+
+
 if __name__ == "__main__":
     socketio.run(app, debug=True, host="0.0.0.0", port=5000)

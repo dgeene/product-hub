@@ -1,5 +1,54 @@
 # Product Hub
 
+A cross-platform web-based ADB device monitor with interactive shell capabilities.
+
+## Features
+
+- 🔍 Real-time USB device detection (Linux & macOS)
+- 📱 ADB device monitoring with auto-updates
+- 🖥️ Interactive web-based terminal using xterm.js
+- 🔄 Device reboot functionality
+- 💻 Execute ADB shell commands directly from browser
+
+## Quick Start
+
+1. Install dependencies:
+   ```bash
+   poetry install
+   ```
+
+2. Run the server:
+   ```bash
+   poetry run python -m src.product_hub.device_monitor
+   ```
+
+3. Open your browser to `http://localhost:5000`
+
+## Usage
+
+1. **View Devices**: Connected ADB devices appear in the list automatically
+2. **Select Device**: Click on any device to select it
+3. **Reboot**: Click "Reboot Device" to restart the selected device
+4. **Open Shell**: Click "Toggle Shell" to open an interactive terminal
+5. **Execute Commands**: Type ADB shell commands and press Enter
+
+### Example Shell Commands
+```bash
+# Get Android version
+getprop ro.build.version.release
+
+# List installed packages
+pm list packages
+
+# Check battery status
+dumpsys battery
+
+# View recent logs
+logcat -d -t 50
+```
+
+See [FEATURES.md](FEATURES.md) for detailed feature documentation.
+
 ## Setup prep
 
 ### Linux
